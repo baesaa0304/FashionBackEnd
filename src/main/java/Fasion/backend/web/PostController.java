@@ -55,23 +55,21 @@ public class PostController {
     /**
      * POST 글 상세보기
      */
-    @GetMapping({"/details"})
-    public void readDetail(Long postId){
-
-        postService.readDetail(postId);
+    @GetMapping("/details/{postId}")
+    public ResponseEntity<Post> readDetail(@PathVariable Long postId) {
+        Post post = postService.readDetail(postId);
+        return ResponseEntity.ok(post);
     }
 
     /**
      * POST 글 수정하기
      */
     @PostMapping("/update")
-    public ResponseEntity<String> update(@RequestBody PostUpdateDto dto) {
+    public ResponseEntity<String> update(@ModelAttribute PostUpdateDto dto) throws IOException{
         log.info("update(dto={})", dto);
 
-        // 서비스 호출로 포스트 업데이트
         postService.update(dto);
 
-        // 수정된 포스트의 ID를 포함하여 응답
         return ResponseEntity.ok("수정 완료 . ID: " + dto.getPostId());
     }
 
