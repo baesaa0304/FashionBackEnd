@@ -5,6 +5,7 @@ import Fasion.backend.domain.Post;
 import Fasion.backend.dto.PostCreateDto;
 import Fasion.backend.dto.PostUpdateDto;
 import Fasion.backend.repository.PostRepository;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,14 +17,21 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+
 public class PostService {
     private final PostRepository postRepository;
+    private final ImageHandler imageHandler;
 
     /**
      * POST 글 작성하기
      */
+    @Transactional
     public Post create(PostCreateDto dto) throws IOException {
-        Post entity = dto.toEntity();
+        // 이미지 경로 저장
+        String imagePath1 = imageHandler.saveImage(dto.getImage1() , null );
+        String imagePath2 = dto.getImage2() != null ? imageHandler.saveImage(dto.getImage2() , null) : null;
+        String imagePath3 = dto.getImage3() != null ? imageHandler.saveImage(dto.getImage3() , null) : null;
+        Post entity = dto.toEntity(imagePath1, imagePath2, imagePath3);
         return postRepository.save(entity);
     }
 
@@ -47,12 +55,12 @@ public class PostService {
     /**
      * POST 글 수정(제목 , 내용 , 사진 수정 가능)
      */
-//    @Transactional
-//    public void update(PostUpdateDto dto) {
-//        Post entity = postRepository.findById(dto.getPostId()).orElseThrow();
-//        entity.update(dto);
-//
-//    }
+    @Transactional
+    public void update(PostUpdateDto dto) throws IOException {
+        Post entity = postRepository.findById(dto.getPostId()).orElseThrow();
+        entity.update(dto , imageHandler); // 나머지 필드 업데이트
+        postRepository.save(entity);
+    }
 
     /**
      * POST 삭제
