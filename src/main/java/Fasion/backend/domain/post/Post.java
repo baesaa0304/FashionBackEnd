@@ -1,6 +1,7 @@
-package Fasion.backend.domain;
+package Fasion.backend.domain.post;
 
-import Fasion.backend.dto.PostUpdateDto;
+import Fasion.backend.domain.BaseTimeEntity;
+import Fasion.backend.dto.post.PostUpdateDto;
 import Fasion.backend.service.ImageHandler;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,7 +16,7 @@ import java.io.IOException;
 @ToString
 @Entity
 @Table(name = "POSTS")
-public class Post extends BaseTimeEntity{
+public class Post extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "POST_ID")

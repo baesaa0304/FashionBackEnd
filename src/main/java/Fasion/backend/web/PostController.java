@@ -1,17 +1,14 @@
 package Fasion.backend.web;
 
 
-import Fasion.backend.domain.Post;
-import Fasion.backend.dto.PostCreateDto;
-import Fasion.backend.dto.PostUpdateDto;
+import Fasion.backend.domain.post.Post;
+import Fasion.backend.dto.post.PostCreateDto;
+import Fasion.backend.dto.post.PostUpdateDto;
 import Fasion.backend.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
