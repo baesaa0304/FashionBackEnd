@@ -1,10 +1,11 @@
-package Fasion.backend.service;
+package Fasion.backend.service.post;
 
 
 import Fasion.backend.domain.post.Post;
 import Fasion.backend.dto.post.PostCreateDto;
 import Fasion.backend.dto.post.PostUpdateDto;
 import Fasion.backend.repository.PostRepository;
+import Fasion.backend.service.ImageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

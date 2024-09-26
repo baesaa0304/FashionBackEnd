@@ -1,8 +1,8 @@
-package Fasion.backend.service;
+package Fasion.backend.service.member;
 
 
-import Fasion.backend.domain.Member.Member;
-import Fasion.backend.dto.Member.MemberSignUpDto;
+import Fasion.backend.domain.member.Member;
+import Fasion.backend.dto.member.MemberSignUpDto;
 import Fasion.backend.exception.DuplicateMemberIdException;
 import Fasion.backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,9 @@ public class MemberService implements UserDetailsService {
      * 회원가입
      * 중복 아이디 확인
      * 가입 후 이메일 인증 시도
+     *
      * @param dto
+     * @param
      * @return
      */
     public String registerMember(MemberSignUpDto dto) {
@@ -39,27 +41,10 @@ public class MemberService implements UserDetailsService {
         if (memberRepository.existsByUserId(dto.getUserId())) {
             throw new DuplicateMemberIdException("중복된 아이디입니다.");
         }
-        // 이메일 인증을 위한 사용자 정보 임시 저장
-        pendingVerifications.put(dto.getUserId(), dto);
-
-        return dto.getUserId(); // 회원가입 ID 반환
-    }
-
-    /**
-     * 이메일 인증 후 회원가입
-     * @param @email
-     * @return
-     */
-    public String verifyEmail(String email) {
-        // 여기서 이메일에 해당하는 회원 정보를 가져와서 회원가입 로직을 수행
-        // 예를 들어, 이미 이메일로 회원가입을 위한 DTO를 받았다고 가정
-        MemberSignUpDto dto = pendingVerifications.get(email);
-
-        if (dto == null) {
-            throw new IllegalArgumentException("회원가입 정보가 없습니다."); // 예외 처리
+        // 중복 이메일 확인
+        if (memberRepository.existsByEmail(dto.getEmail())) { // 이메일 중복 확인 메서드 필요
+            throw new DuplicateMemberIdException("중복된 이메일입니다.");
         }
-
-        // 회원정보 저장
         Member member = Member.builder()
                 .userId(dto.getUserId())
                 .password(passwordEncoder.encode(dto.getPassword()))
@@ -70,23 +55,15 @@ public class MemberService implements UserDetailsService {
                 .build();
 
         memberRepository.save(member);
-        return member.getUserId(); // 회원가입 완료 후 사용자 ID 반환
+
+        return dto.getUserId(); // 회원가입 ID 반환
     }
-
-
-
-
-
-
-
-
 
 
     /**
      * 회원 아이디가 있는지 없는지 확인하는 메서드
      * @param userId
      * @return
-     * @throws UsernameNotFoundException
      */
     @Override
     public UserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {

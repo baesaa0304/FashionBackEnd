@@ -1,4 +1,4 @@
-package Fasion.backend.domain.Member;
+package Fasion.backend.domain.member;
 
 import lombok.Getter;
 

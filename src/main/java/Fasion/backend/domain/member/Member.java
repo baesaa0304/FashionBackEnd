@@ -1,4 +1,4 @@
-package Fasion.backend.domain.Member;
+package Fasion.backend.domain.member;
 
 import Fasion.backend.domain.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -42,11 +41,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     @Column(name = "ROLE", nullable = false)
     private Role role;
 
-    private boolean emailVerified; // 이메일 인증 여부 필드 추가
-
-    public void verifyEmail() {
-        this.emailVerified = true; // 이메일 인증 상태를 업데이트하는 메서드
-    }
+    private boolean isEmailVerified;
 
     @Builder
     private Member(String userId, String password, String nickName, String email, LocalDate birthday, Gender gender) {

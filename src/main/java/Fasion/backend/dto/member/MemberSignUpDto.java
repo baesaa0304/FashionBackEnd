@@ -1,7 +1,7 @@
-package Fasion.backend.dto.Member;
+package Fasion.backend.dto.member;
 
 
-import Fasion.backend.domain.Member.Gender;
+import Fasion.backend.domain.member.Gender;
 import lombok.Data;
 
 import java.time.LocalDate;

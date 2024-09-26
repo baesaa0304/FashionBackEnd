@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping("/")
 public class HomeController {
+    /**
+     * 메인 페이지
+     * @return
+     */
     @GetMapping
     public String home() {
         log.info("HOME");
