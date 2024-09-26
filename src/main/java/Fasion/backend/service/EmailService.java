@@ -1,20 +1,78 @@
 package Fasion.backend.service;
 
-import org.springframework.stereotype.Component;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-@Component
+
+@Service
+@RequiredArgsConstructor
 public class EmailService {
-    public void sendVerificationEmail(String email, String userId) {
-        String token = UUID.randomUUID().toString(); // 토큰 생성
-        String verificationUrl = "http://yourdomain.com/api/members/verify/" + userId; // 인증 URL
-        String subject = "Email Verification";
-        String body = "Please verify your email by clicking the link: " + verificationUrl;
 
-        // TODO: 실제 이메일 발송 로직 구현
-        System.out.println("Sending email to: " + email);
-        System.out.println("Subject: " + subject);
-        System.out.println("Body: " + body);
+    private final JavaMailSender javaMailSender;
+    private static final String senderEmail = "dev.limezero00@gmail.com";
+
+    // 인증번호를 저장할 Map (이메일-인증번호 매핑)
+    private final Map<String, String> emailAuthCodeMap = new HashMap<>();
+
+
+    // 랜덤으로 숫자 생성
+    public String createNumber() {
+        Random random = new Random();
+        StringBuilder key = new StringBuilder();
+
+        for (int i = 0; i < 8; i++) { // 인증 코드 8자리
+            int index = random.nextInt(3); // 0~2까지 랜덤, 랜덤값으로 switch문 실행
+
+            switch (index) {
+                case 0 -> key.append((char) (random.nextInt(26) + 97)); // 소문자
+                case 1 -> key.append((char) (random.nextInt(26) + 65)); // 대문자
+                case 2 -> key.append(random.nextInt(10)); // 숫자
+            }
+        }
+        return key.toString();
+    }
+
+    public MimeMessage createMail(String mail, String number) throws MessagingException {
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        message.setFrom(senderEmail);
+        message.setRecipients(MimeMessage.RecipientType.TO, mail);
+        message.setSubject("이메일 인증");
+        String body = "";
+        body += "<h3>요청하신 인증 번호입니다.</h3>";
+        body += "<h1>" + number + "</h1>";
+        body += "<h3>감사합니다.</h3>";
+        message.setText(body, "UTF-8", "html");
+
+        return message;
+    }
+
+    // 메일 발송
+    public String sendSimpleMessage(String sendEmail) throws MessagingException {
+        String number = createNumber(); // 랜덤 인증번호 생성
+
+        MimeMessage message = createMail(sendEmail, number); // 메일 생성
+        try {
+            javaMailSender.send(message); // 메일 발송
+        } catch (MailException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("메일 발송 중 오류가 발생했습니다.");
+        }
+
+        return number; // 생성된 인증번호 반환
+    }
+
+    // 인증번호 검증
+    public boolean verifyAuthCode(String email, String authCode) {
+        String storedAuthCode = emailAuthCodeMap.get(email); // 저장된 인증번호 가져오기
+        return storedAuthCode != null && storedAuthCode.equals(authCode); // 인증번호 일치 여부 확인
     }
 }

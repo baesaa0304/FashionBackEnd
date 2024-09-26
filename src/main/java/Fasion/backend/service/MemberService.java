@@ -7,15 +7,12 @@ import Fasion.backend.exception.DuplicateMemberIdException;
 import Fasion.backend.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -26,7 +23,6 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
     private final ConcurrentHashMap<String, MemberSignUpDto> pendingVerifications = new ConcurrentHashMap<>();
 
     /**
@@ -48,31 +44,37 @@ public class MemberService implements UserDetailsService {
 
         return dto.getUserId(); // 회원가입 ID 반환
     }
+
     /**
-     * 이메일 인증 시도
-     * 시간 정해야함 5분 이내 아이디 시도
-     * @param userId
+     * 이메일 인증 후 회원가입
+     * @param @email
      * @return
      */
-    public boolean verifyEmail(String userId) {
-        if (pendingVerifications.containsKey(userId)) {
-            MemberSignUpDto dto = pendingVerifications.remove(userId);
-            // DB에 저장
-            Member member = Member.builder()
-                    .userId(dto.getUserId())
-                    .password(dto.getPassword())
-                    .nickName(dto.getNickName())
-                    .email(dto.getEmail())
-                    .birthday(dto.getBirthday())
-                    .gender(dto.getGender())
-                    .build();
-            memberRepository.save(member);
-            return true;
+    public String verifyEmail(String email) {
+        // 여기서 이메일에 해당하는 회원 정보를 가져와서 회원가입 로직을 수행
+        // 예를 들어, 이미 이메일로 회원가입을 위한 DTO를 받았다고 가정
+        MemberSignUpDto dto = pendingVerifications.get(email);
+
+        if (dto == null) {
+            throw new IllegalArgumentException("회원가입 정보가 없습니다."); // 예외 처리
         }
-        return false; // 인증 실패
+
+        // 회원정보 저장
+        Member member = Member.builder()
+                .userId(dto.getUserId())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .nickName(dto.getNickName())
+                .email(dto.getEmail())
+                .birthday(dto.getBirthday())
+                .gender(dto.getGender())
+                .build();
+
+        memberRepository.save(member);
+        return member.getUserId(); // 회원가입 완료 후 사용자 ID 반환
     }
 
-    // TODO: 필요 시 인증 기간 체크 로직 추가
+
+
 
 
 
