@@ -1,9 +1,7 @@
 package Fasion.backend.repositoryTest.postTest;
 
 
-import Fasion.backend.domain.Post;
-import Fasion.backend.dto.PostCreateDto;
-import Fasion.backend.dto.PostUpdateDto;
+import Fasion.backend.domain.post.Post;
 import Fasion.backend.repository.PostRepository;
 
 import lombok.extern.slf4j.Slf4j;
