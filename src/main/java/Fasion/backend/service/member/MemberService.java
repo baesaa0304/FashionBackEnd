@@ -23,7 +23,7 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final ConcurrentHashMap<String, MemberSignUpDto> pendingVerifications = new ConcurrentHashMap<>();
+    //private final ConcurrentHashMap<String, MemberSignUpDto> pendingVerifications = new ConcurrentHashMap<>();
 
     /**
      * 회원가입
@@ -32,18 +32,13 @@ public class MemberService implements UserDetailsService {
      *
      * @param dto
      * @param
-     * @return
      */
-    public String registerMember(MemberSignUpDto dto) {
+    public void registerMember(MemberSignUpDto dto) {
         log.info("registerMember(dto={})" , dto);
 
         // 중복 아이디 인 경우 !
         if (memberRepository.existsByUserId(dto.getUserId())) {
-            throw new DuplicateMemberIdException("중복된 아이디입니다.");
-        }
-        // 중복 이메일 확인
-        if (memberRepository.existsByEmail(dto.getEmail())) { // 이메일 중복 확인 메서드 필요
-            throw new DuplicateMemberIdException("중복된 이메일입니다.");
+            throw new DuplicateMemberIdException("중복된 아이디입니다. 변경해주세요");
         }
         Member member = Member.builder()
                 .userId(dto.getUserId())
@@ -56,7 +51,6 @@ public class MemberService implements UserDetailsService {
 
         memberRepository.save(member);
 
-        return dto.getUserId(); // 회원가입 ID 반환
     }
 
 

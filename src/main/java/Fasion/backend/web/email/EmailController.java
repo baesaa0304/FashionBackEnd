@@ -38,7 +38,7 @@ public class EmailController {
         if (checked) {
             return "이메일 인증 성공!";
         } else {
-            throw new IllegalArgumentException("유효시간이 지났거나 인증이 만료되었습니다. 다시 시도해주세요.");
+            throw new NullPointerException("유효시간이 지났거나 인증이 만료되었습니다. 다시 시도해주세요.");
         }
     }
 
