@@ -1,11 +1,8 @@
-package Fasion.backend.dto;
+package Fasion.backend.dto.post;
 
 
-import Fasion.backend.domain.Post;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @Data
 public class PostUpdateDto {

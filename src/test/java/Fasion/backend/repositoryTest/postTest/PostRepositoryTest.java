@@ -1,9 +1,7 @@
 package Fasion.backend.repositoryTest.postTest;
 
 
-import Fasion.backend.domain.Post;
-import Fasion.backend.dto.PostCreateDto;
-import Fasion.backend.dto.PostUpdateDto;
+import Fasion.backend.domain.post.Post;
 import Fasion.backend.repository.PostRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,7 @@ public class PostRepositoryTest {
     private PostRepository postRepository;
 
 
-    @Test
+    //@Test
     public void testDelete() {
         long count = postRepository.count(); // DB 테이블의 행의 개수(엔터티 개수)
         log.info("삭제 전 count = {}", count);

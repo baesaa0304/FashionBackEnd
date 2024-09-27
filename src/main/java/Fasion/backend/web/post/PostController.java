@@ -1,17 +1,15 @@
-package Fasion.backend.web;
+package Fasion.backend.web.post;
 
 
-import Fasion.backend.domain.Post;
-import Fasion.backend.dto.PostCreateDto;
-import Fasion.backend.dto.PostUpdateDto;
-import Fasion.backend.service.PostService;
+import Fasion.backend.domain.post.Post;
+import Fasion.backend.dto.post.PostCreateDto;
+import Fasion.backend.dto.post.PostUpdateDto;
+import Fasion.backend.service.post.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,11 +26,13 @@ public class PostController {
     /**
      * POST 글 쓰기
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/create")
     public void create() {
         log.info("create() GET");
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/create")
     public ResponseEntity<String> create(@ModelAttribute PostCreateDto dto) throws IOException {
         // 서비스에서 데이터 생성
@@ -55,6 +55,7 @@ public class PostController {
     /**
      * POST 글 상세보기
      */
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/details/{postId}")
     public ResponseEntity<Post> readDetail(@PathVariable Long postId) {
         Post post = postService.readDetail(postId);
@@ -64,6 +65,7 @@ public class PostController {
     /**
      * POST 글 수정하기
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/update")
     public ResponseEntity<String> update(@ModelAttribute PostUpdateDto dto) throws IOException{
         log.info("update(dto={})", dto);
@@ -76,6 +78,7 @@ public class PostController {
     /**
      *  POST 글 삭제하기
      */
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/delete")
     public ResponseEntity<String> delete(@RequestParam long postId) {
         log.info("delete(id={})", postId);

@@ -1,7 +1,7 @@
 package Fasion.backend.repository;
 
 
-import Fasion.backend.domain.Post;
+import Fasion.backend.domain.post.Post;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
