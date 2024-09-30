@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 @Data
 public class MemberSignUpDto {
-    private String userId;
+    private String memberId;
     private String password;
     private String nickName;
     private String email;

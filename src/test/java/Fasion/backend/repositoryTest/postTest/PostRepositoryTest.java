@@ -23,7 +23,7 @@ public class PostRepositoryTest {
         long count = postRepository.count(); // DB 테이블의 행의 개수(엔터티 개수)
         log.info("삭제 전 count = {}", count);
 
-        postRepository.deleteById(11L);
+        postRepository.deleteById(19L);
 
         count = postRepository.count();
         log.info("삭제 후 count = {}", count);

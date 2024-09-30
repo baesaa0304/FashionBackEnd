@@ -24,7 +24,7 @@ public class MemberRepositoryTest {
     public void testRegisterMember() {
         // 회원 정보를 준비합니다.
         Member member = Member.builder()
-                .userId("baegaa1224")
+                .memberId("baegaa1224")
                 .password("sunny0304@")
                 .nickName("sun young bae")
                 .email("baesaa0304@naver.com")
@@ -38,6 +38,6 @@ public class MemberRepositoryTest {
 
         // 결과 검증
         assertThat(savedMember).isNotNull();
-        assertThat(savedMember.getUserId()).isEqualTo("baegaa1224");
+        assertThat(savedMember.getMemberId()).isEqualTo("baegaa1224");
     }
 }

@@ -42,6 +42,10 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
 
+	// Spring Boot DevTools (for fast reload during development)
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testImplementation 'org.assertj:assertj-core:3.22.0'

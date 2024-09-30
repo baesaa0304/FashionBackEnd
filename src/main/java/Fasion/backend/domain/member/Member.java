@@ -16,10 +16,11 @@ import java.util.List;
 @Getter @Setter
 @ToString
 @Entity
-@Table(name = "USER")
+@Table(name = "MEMBER")
 public class Member extends BaseTimeEntity implements UserDetails {
     @Id
-    private String userId;
+    @Column(name = "MEMBER_ID")
+    private String memberId;
 
     @Column(name = "PASSWORD", nullable = false)
     private String password;
@@ -44,8 +45,8 @@ public class Member extends BaseTimeEntity implements UserDetails {
     private boolean isEmailVerified;
 
     @Builder
-    private Member(String userId, String password, String nickName, String email, LocalDate birthday, Gender gender) {
-        this.userId = userId;
+    private Member(String memberId, String password, String nickName, String email, LocalDate birthday, Gender gender) {
+        this.memberId = memberId;
         this.password = password;
         this.nickName = nickName;
         this.email = email;
@@ -62,7 +63,7 @@ public class Member extends BaseTimeEntity implements UserDetails {
     // 사용자 id 반환 (고유값)
     @Override
     public String getUsername() {
-        return this.userId;
+        return this.memberId;
     }
 
     // 사용자의 계정이 만료되었는지 여부
